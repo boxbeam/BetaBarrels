@@ -23,11 +23,14 @@ import redempt.redlib.blockdata.events.DataBlockDestroyEvent;
 import redempt.redlib.itemutils.ItemUtils;
 import redempt.redlib.misc.LocationUtils;
 import redempt.redlib.misc.Task;
+import redempt.redlib.protection.ProtectionPolicy;
+import redempt.redlib.protection.ProtectionPolicy.ProtectionType;
 
 public class BarrelListener implements Listener {
 	
 	public BarrelListener() {
 		Bukkit.getPluginManager().registerEvents(this, BetaBarrels.plugin);
+		ProtectionPolicy.registerProtection(BarrelUseEvent.class, ProtectionType.CONTAINER_ACCESS, BarrelUseEvent::getPlayer, e -> e.getBarrel().getBlock());
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

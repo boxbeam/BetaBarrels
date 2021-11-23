@@ -1,5 +1,6 @@
 package redempt.betabarrels;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import redempt.betabarrels.BarrelUseEvent.BarrelAction;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.itemutils.ItemUtils;
@@ -171,6 +173,9 @@ public class Barrel {
 	}
 	
 	public void insertStack(Player player) {
+		if (!fireEvent(player, BarrelAction.DEPOSIT_STACK)) {
+			return;
+		}
 		ItemStack item = player.getInventory().getItemInMainHand();
 		ItemStack held = getItem();
 		if (held == null || getCount() == 0) {
@@ -185,6 +190,9 @@ public class Barrel {
 	}
 	
 	public void insertAll(Player player) {
+		if (!fireEvent(player, BarrelAction.DEPOSIT_ALL)) {
+			return;
+		}
 		ItemStack item = player.getInventory().getItemInMainHand();
 		ItemStack held = getItem();
 		if (held == null || getCount() == 0) {
@@ -199,6 +207,9 @@ public class Barrel {
 	}
 	
 	public void extractOne(Player player) {
+		if (!fireEvent(player, BarrelAction.TAKE_ONE)) {
+			return;
+		}
 		int count = getCount();
 		ItemStack item = getItem();
 		if (count <= 0 || item == null) {
@@ -209,6 +220,9 @@ public class Barrel {
 	}
 	
 	public void extractStack(Player player) {
+		if (!fireEvent(player, BarrelAction.TAKE_STACK)) {
+			return;
+		}
 		ItemStack item = getItem();
 		if (item == null) {
 			return;
@@ -221,6 +235,12 @@ public class Barrel {
 		}
 		setCount(count - amount);
 		ItemUtils.give(player, item, amount);
+	}
+	
+	private boolean fireEvent(Player player, BarrelAction action) {
+		BarrelUseEvent event = new BarrelUseEvent(player, this, action);
+		Bukkit.getPluginManager().callEvent(event);
+		return !event.isCancelled();
 	}
 	
 	public Block getBlock() {
