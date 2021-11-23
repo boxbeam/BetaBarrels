@@ -1,0 +1,6 @@
+name: BetaBarrels
+version: 1.0
+depend: [RedLib]
+author: Redempt
+main: redempt.betabarrels.BetaBarrels
+api-version: 1.16
