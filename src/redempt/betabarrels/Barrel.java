@@ -13,8 +13,12 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import redempt.betabarrels.BarrelUseEvent.BarrelAction;
 import redempt.redlib.blockdata.BlockDataManager;
@@ -143,7 +147,7 @@ public class Barrel {
 			return;
 		}
 		String name = getItemName(item);
-		item = ItemUtils.setName(item, ChatColor.WHITE + "" + count + "x " + name);
+		item = ItemUtils.setName(item, ChatColor.WHITE + "" + FormatUtils.formatLargeInteger(count) + "x " + name);
 		frame.setItem(item, false);
 		frame.setRotation(Rotation.NONE);
 		frame.setVisible(false);
@@ -238,9 +242,14 @@ public class Barrel {
 	}
 	
 	private boolean fireEvent(Player player, BarrelAction action) {
-		BarrelUseEvent event = new BarrelUseEvent(player, this, action);
+		Event event = new InventoryOpenEvent(new BarrelInventoryView(player, getInventory()));
 		Bukkit.getPluginManager().callEvent(event);
-		return !event.isCancelled();
+		if (((Cancellable) event).isCancelled()) {
+			return false;
+		}
+		event = new BarrelUseEvent(player, this, action);
+		Bukkit.getPluginManager().callEvent(event);
+		return !((Cancellable) event).isCancelled();
 	}
 	
 	public Block getBlock() {

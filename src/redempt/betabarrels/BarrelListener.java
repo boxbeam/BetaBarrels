@@ -30,7 +30,6 @@ public class BarrelListener implements Listener {
 	
 	public BarrelListener() {
 		Bukkit.getPluginManager().registerEvents(this, BetaBarrels.plugin);
-		ProtectionPolicy.registerProtection(BarrelUseEvent.class, ProtectionType.CONTAINER_ACCESS, BarrelUseEvent::getPlayer, e -> e.getBarrel().getBlock());
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -44,7 +43,7 @@ public class BarrelListener implements Listener {
 		});
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onInteract(PlayerInteractEvent e) {
 		if (e.getClickedBlock() == null || e.getHand() != EquipmentSlot.HAND) {
 			return;
@@ -65,6 +64,9 @@ public class BarrelListener implements Listener {
 	
 	@EventHandler
 	public void onInventoryOpen(InventoryOpenEvent e) {
+		if (e.getView() instanceof BarrelInventoryView) {
+			return;
+		}
 		if (Barrel.getBarrel(e.getInventory()) != null) {
 			e.setCancelled(true);
 		}
@@ -157,7 +159,7 @@ public class BarrelListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onHopperMove(InventoryMoveItemEvent e) {
 		if (!(e.getSource().getHolder() instanceof BlockState) || !(e.getDestination().getHolder() instanceof BlockState)) {
 			return;
