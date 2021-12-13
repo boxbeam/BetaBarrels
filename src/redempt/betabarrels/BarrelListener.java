@@ -6,6 +6,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -23,8 +24,6 @@ import redempt.redlib.blockdata.events.DataBlockDestroyEvent;
 import redempt.redlib.itemutils.ItemUtils;
 import redempt.redlib.misc.LocationUtils;
 import redempt.redlib.misc.Task;
-import redempt.redlib.protection.ProtectionPolicy;
-import redempt.redlib.protection.ProtectionPolicy.ProtectionType;
 
 public class BarrelListener implements Listener {
 	
@@ -161,6 +160,13 @@ public class BarrelListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onHopperMove(InventoryMoveItemEvent e) {
+		if (e.getDestination().getHolder() instanceof HopperMinecart && e.getSource().getHolder() instanceof BlockState) {
+			Barrel barrel = Barrel.getBarrel(e.getSource());
+			if (barrel != null) {
+				e.setCancelled(true);
+			}
+			return;
+		}
 		if (!(e.getSource().getHolder() instanceof BlockState) || !(e.getDestination().getHolder() instanceof BlockState)) {
 			return;
 		}
