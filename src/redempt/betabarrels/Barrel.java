@@ -147,7 +147,12 @@ public class Barrel {
 			return;
 		}
 		String name = getItemName(item);
-		item = ItemUtils.setName(item, ChatColor.WHITE + "" + FormatUtils.formatLargeInteger(count) + "x " + name);
+        if (count < 2) {
+            item = ItemUtils.setName(item, ChatColor.WHITE + "" + FormatUtils.formatLargeInteger(count) + "x " + name);
+        } else {
+            item = ItemUtils.setName(item, ChatColor.WHITE + "" + FormatUtils.formatLargeInteger(count) + "x " + name);
+        }
+
 		frame.setItem(item, false);
 		frame.setRotation(Rotation.NONE);
 		frame.setVisible(false);
