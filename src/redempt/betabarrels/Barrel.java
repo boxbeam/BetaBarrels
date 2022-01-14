@@ -150,7 +150,7 @@ public class Barrel {
         if (count < 2) {
             item = ItemUtils.setName(item, ChatColor.WHITE + "" + FormatUtils.formatLargeInteger(count) + "x " + name);
         } else {
-            item = ItemUtils.setName(item, ChatColor.WHITE + "" + FormatUtils.formatLargeInteger(count) + "x " + name);
+            item = ItemUtils.setName(item, ChatColor.WHITE + "" + FormatUtils.formatLargeInteger(count) + "x " + name + "'s");
         }
 
 		frame.setItem(item, false);
