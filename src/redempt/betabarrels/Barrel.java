@@ -18,7 +18,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import redempt.betabarrels.BarrelUseEvent.BarrelAction;
 import redempt.redlib.blockdata.BlockDataManager;
@@ -32,7 +31,8 @@ public class Barrel {
 	
 	public static void init() {
 		BetaBarrels.plugin.getDataFolder().mkdirs();
-		manager = new BlockDataManager(BetaBarrels.plugin.getDataFolder().toPath().resolve("barrels.db"));
+		manager = BlockDataManager.createSQLite(BetaBarrels.plugin, BetaBarrels.plugin.getDataFolder().toPath().resolve("barrels.db"), true, true);
+		manager.migrate();
 	}
 	
 	public static void save() {
@@ -62,7 +62,7 @@ public class Barrel {
 	}
 	
 	public int getCount() {
-		Integer count = (Integer) db.get("count");
+		Integer count = db.getInt("count");
 		return count == null ? 0 : count;
 	}
 	

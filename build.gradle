@@ -19,12 +19,12 @@ repositories {
 	}
 	mavenLocal()
 	maven {
-		url = "https://jitpack.io"
+		url = "https://redempt.dev"
 	}
 }
 dependencies {
-	compileOnly "org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT"
-	compileOnly "com.github.Redempt:RedLib:6.1.4.3"
+	compileOnly "org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT"
+	compileOnly "com.github.Redempt:RedLib:6.5"
 }
 sourceSets {
 	main {
