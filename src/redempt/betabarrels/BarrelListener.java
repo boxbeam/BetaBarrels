@@ -39,6 +39,8 @@ public class BarrelListener implements Listener {
 		Task.syncDelayed(BetaBarrels.plugin, () -> {
 			Barrel barrel = Barrel.getAt(e.getBlock());
 			barrel.createFrame();
+			ItemStack item = e.getItemInHand();
+			BarrelItem.handlePlace(barrel, item);
 		});
 	}
 	
@@ -146,6 +148,10 @@ public class BarrelListener implements Listener {
 			frame.remove();
 		}
 		if (count == 0 || item == null) {
+			return;
+		}
+		if (BetaBarrelsConfig.barrelDropSelf) {
+			e.getBlock().getWorld().dropItem(LocationUtils.center(e.getBlock()), BarrelItem.get(item, count));
 			return;
 		}
 		int stackSize = item.getMaxStackSize();

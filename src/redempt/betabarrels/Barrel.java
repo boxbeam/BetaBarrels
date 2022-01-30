@@ -146,18 +146,10 @@ public class Barrel {
 			frame.setItem(null);
 			return;
 		}
-		String name = getItemName(item);
-		item = ItemUtils.setName(item, ChatColor.WHITE + "" + FormatUtils.formatLargeInteger(count) + "x " + name);
+		item = ItemUtils.setName(item, BetaBarrels.getDisplay(item, count));
 		frame.setItem(item, false);
 		frame.setRotation(Rotation.NONE);
 		frame.setVisible(false);
-	}
-	
-	private String getItemName(ItemStack item) {
-		if (!item.hasItemMeta() || !item.getItemMeta().hasDisplayName()) {
-			return FormatUtils.toTitleCase(item.getType().toString().replace("_", " "));
-		}
-		return item.getItemMeta().getDisplayName();
 	}
 	
 	public void interact(Player player, boolean left, boolean shift) {
