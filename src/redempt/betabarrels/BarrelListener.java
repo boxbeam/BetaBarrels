@@ -152,6 +152,7 @@ public class BarrelListener implements Listener {
 		}
 		if (BetaBarrelsConfig.barrelDropSelf) {
 			e.getBlock().getWorld().dropItem(LocationUtils.center(e.getBlock()), BarrelItem.get(item, count));
+			e.getBlock().setType(Material.AIR);
 			return;
 		}
 		int stackSize = item.getMaxStackSize();
