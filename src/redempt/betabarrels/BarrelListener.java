@@ -73,8 +73,7 @@ public class BarrelListener implements Listener {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public Barrel onBreakFrame(HangingBreakEvent e) {
+	private Barrel handleBreakFrame(HangingBreakEvent e) {
 		Block block = e.getEntity().getLocation().getBlock().getRelative(e.getEntity().getAttachedFace());
 		Barrel barrel = Barrel.getAt(block);
 		if (barrel == null) {
@@ -88,8 +87,13 @@ public class BarrelListener implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onBreakFrame(HangingBreakEvent e) {
+		handleBreakFrame(e);
+	}
+	
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBreakFrameByEntity(HangingBreakByEntityEvent e) {
-		Barrel barrel = onBreakFrame(e);
+		Barrel barrel = handleBreakFrame(e);
 		if (barrel == null) {
 			return;
 		}
